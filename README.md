@@ -11,3 +11,7 @@
 1. Clone the repository:
    ```bash
    git clone https://github.com/ConceptExplorer/CoolSync.git
+
+## License
+
+This project is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License - see the [LICENSE](LICENSE) file for details.
