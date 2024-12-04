@@ -27,3 +27,8 @@ CoolSync is provided "as is", without warranty of any kind, express or implied, 
 - This is an early release and may contain bugs.
 
 For full license details, see the [LICENSE](LICENSE) file.
+
+## About This Project
+
+This project was developed with the assistance of Microsoft Co-Pilot, an advanced AI companion designed to enhance productivity and creativity. Special thanks to Co-Pilot for its invaluable support in bringing CoolSync to life!
+
