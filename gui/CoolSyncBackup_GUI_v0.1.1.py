@@ -81,10 +81,11 @@ class CoolSyncBackupApp:
 
     def stop_backup(self):
         self.stop_backup_flag.set()
-        self.log("Backup process stopped by the user.")
+        self.log("Backup Stopped.\n-------------------")
 
     def start_backup(self):
         self.stop_backup_flag.clear()
+        self.log("\n-------------------\nStarting backup...")
         backup_thread = threading.Thread(target=self.run_backup, daemon=True)
         backup_thread.start()
 
