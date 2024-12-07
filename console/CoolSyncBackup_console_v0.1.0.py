@@ -2,12 +2,17 @@ import os
 import time
 import shutil
 import subprocess
+import re
+
+# CoolSync Backup
+# Version: v0.1.0
+# Initial Release
 
 # Default values for testing
 DEFAULT_SOURCE_DIR = r'C:\Users\MindEye\Documents\Code\Python_code\Test_folder\Source_files'
 DEFAULT_DEST_DIR = r'C:\Users\MindEye\Documents\Code\Python_code\Test_folder\Dest_files'
 DEFAULT_START_TEMP = 30  # Example start temperature in Celsius
-DEFAULT_STOP_TEMP = 50  # Updated default stop temperature in Celsius
+DEFAULT_STOP_TEMP = 47  # Updated default stop temperature in Celsius
 
 # Function to get user input for directories and temperatures
 def get_user_input():
@@ -22,7 +27,7 @@ def get_user_input():
 def get_drive_letters(paths):
     drive_letters = set()
     for path in paths:
-        drive_letters.add(os.path.splitdrive(path)[0])
+        drive_letters.add(os.path.splitdrive(path)[0])  # Corrected line
     return list(drive_letters)
 
 # Function to get the drive's current temperature using smartctl
@@ -35,7 +40,6 @@ def get_drive_temperature(drive_letter):
         for line in result.stdout.split('\n'):
             if 'Temperature_Celsius' in line or 'Temperature' in line:
                 # Extract the temperature value using regex
-                import re
                 match = re.search(r'(\d+)', line)
                 if match:
                     temp = int(match.group(1))
@@ -71,6 +75,17 @@ def mirror_sync(source_dir, dest_dir, script_dir):
             if not os.path.exists(src_dir_path) and dest_dir_path != script_dir:
                 shutil.rmtree(dest_dir_path)
 
+def preview_files(source_dir, num_files=5):
+    """
+    Preview the first few files in the source directory.
+    """
+    files = os.listdir(source_dir)
+    preview_files = files[:num_files]
+    print("Previewing the first {} files to be synced:".format(num_files))
+    for file in preview_files:
+        print(file)
+    return preview_files
+
 def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -92,7 +107,11 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
     print(f"Start Temperature: {start_temp}°C")
     print(f"Stop Temperature: {stop_temp}°C")
     print(f"Monitoring Drives: {', '.join(drive_letters)}")
-    proceed = input("Do you want to proceed with the backup? (_Y_/_N_): ").lower()
+
+    # Show a preview of the files to be synced
+    preview_files(source_dir)
+
+    proceed = input("Do you want to proceed with the backup? (yes/no): ").lower()
     if proceed not in ['yes', 'y']:
         print("Backup canceled.")
         return
