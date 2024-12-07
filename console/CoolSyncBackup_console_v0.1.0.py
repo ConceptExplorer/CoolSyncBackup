@@ -3,14 +3,18 @@ import time
 import shutil
 import subprocess
 import re
+import configparser
 
 # CoolSync Backup
 # Version: v0.1.0
 # Initial Release
 
 # Default values for testing
-DEFAULT_SOURCE_DIR = r'C:\Users\MindEye\Documents\Code\Python_code\Test_folder\Source_files'
-DEFAULT_DEST_DIR = r'C:\Users\MindEye\Documents\Code\Python_code\Test_folder\Dest_files'
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+DEFAULT_SOURCE_DIR = config.get('DEFAULT', 'SOURCE_DIR', fallback='Your\\Default\\Source\\Directory')
+DEFAULT_DEST_DIR = config.get('DEFAULT', 'DEST_DIR', fallback='Your\\Default\\Destination\\Directory')
 DEFAULT_START_TEMP = 30  # Example start temperature in Celsius
 DEFAULT_STOP_TEMP = 47  # Updated default stop temperature in Celsius
 
@@ -153,7 +157,7 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
                     backup_in_progress = True
                     mirror_sync(source_dir, dest_dir, script_dir)
                     backup_in_progress = False
-                    print("Backup process finished. Here are the first 5 files synced:")
+                    print("Backup process finished.")
                     return  # Exit after backup completes
             elif temp >= stop_temp:
                 if backup_in_progress:
