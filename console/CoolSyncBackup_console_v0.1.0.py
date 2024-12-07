@@ -25,6 +25,15 @@ def get_user_input():
     dest_dir = input(f"Enter the destination directory path [{DEFAULT_DEST_DIR}]: ") or DEFAULT_DEST_DIR
     start_temp = input(f"Enter the start temperature (in Celsius) [{DEFAULT_START_TEMP}]: ") or DEFAULT_START_TEMP
     stop_temp = input(f"Enter the stop temperature (in Celsius) [{DEFAULT_STOP_TEMP}]: ") or DEFAULT_STOP_TEMP
+
+    save_settings = input("Do you want to save these settings for future use? (yes/no): ").lower()
+    if save_settings in ['yes', 'y']:
+        config.set('DEFAULT', 'SOURCE_DIR', source_dir)
+        config.set('DEFAULT', 'DEST_DIR', dest_dir)
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
+        print("Settings saved successfully.")
+
     return source_dir, dest_dir, float(start_temp), float(stop_temp)
 
 # Function to get drive letters from paths
