@@ -52,7 +52,7 @@ def get_drive_temperature(drive_letter):
 
 # Function to perform mirror sync
 def mirror_sync(source_dir, dest_dir, script_dir):
-    synced_files = []  # List to store the first 5 synced files
+    synced_files = []  # List to store the first 5 synced files and their status
 
     # Copy new and updated files from source to destination
     for root, dirs, files in os.walk(source_dir):
@@ -61,9 +61,20 @@ def mirror_sync(source_dir, dest_dir, script_dir):
             dest_file = os.path.join(dest_dir, os.path.relpath(src_file, source_dir))
             dest_dir_path = os.path.dirname(dest_file)
             os.makedirs(dest_dir_path, exist_ok=True)
-            shutil.copy2(src_file, dest_file)
-            if len(synced_files) < 5:  # Collect the first 5 files
-                synced_files.append(os.path.relpath(src_file, source_dir))
+
+            if os.path.exists(dest_file):
+                # Check if the source file is newer than the destination file
+                if os.path.getmtime(src_file) > os.path.getmtime(dest_file):
+                    shutil.copy2(src_file, dest_file)
+                    status = "changed"
+                else:
+                    status = "same"
+            else:
+                shutil.copy2(src_file, dest_file)
+                status = "new"
+
+            if len(synced_files) < 5:  # Collect the first 5 files and their status
+                synced_files.append(f"{os.path.relpath(src_file, source_dir)} - {status}")
     
     # Delete files and directories from destination that are not in source
     for root, dirs, files in os.walk(dest_dir):
@@ -79,7 +90,7 @@ def mirror_sync(source_dir, dest_dir, script_dir):
             if not os.path.exists(src_dir_path) and dest_dir_path != script_dir:
                 shutil.rmtree(dest_dir_path)
 
-    # Print the first 5 files that were synced
+    # Print the first 5 files that were synced and their status
     print("First 5 files that were synced:")
     for file in synced_files:
         print(file)
@@ -142,7 +153,7 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
                     backup_in_progress = True
                     mirror_sync(source_dir, dest_dir, script_dir)
                     backup_in_progress = False
-                    print("Backup process finished.")
+                    print("Backup process finished. Here are the first 5 files synced:")
                     return  # Exit after backup completes
             elif temp >= stop_temp:
                 if backup_in_progress:
