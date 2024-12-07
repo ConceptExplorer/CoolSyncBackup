@@ -1,11 +1,11 @@
-# Contributing to CoolSync
+# Contributing to CoolSync Backup
 
 First off, thanks for taking the time to contribute! 🎉
 
 ## How to contribute
 
 1. **Fork** the repository.
-2. **Clone** your fork: `git clone https://github.com/your-username/CoolSync.git`
+2. **Clone** your fork: `git clone https://github.com/your-username/CoolSync-Backup.git`
 3. Create a new **branch**: `git checkout -b feature-name`
 4. Make your **changes** and **commit** them: `git commit -m "Add a feature"`
 5. Push to your **branch**: `git push origin feature-name`
