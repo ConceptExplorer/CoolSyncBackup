@@ -19,7 +19,7 @@ We will be building and expanding upon this console version, including potential
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/ConceptExplorer/CoolSync.git
+   git clone https://github.com/ConceptExplorer/CoolSync-backup.git
 
 ## License
 
@@ -27,7 +27,7 @@ This project is licensed under the Creative Commons Attribution-ShareAlike 4.0 I
 
 ## Disclaimer
 
-CoolSync is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+CoolSync backup is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
 
 **Important:**
 - Use at your own risk.
