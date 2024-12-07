@@ -6,7 +6,7 @@ import re
 import configparser
 
 # CoolSync Backup
-# Version: v0.1.0
+# Console Version: v0.1.0
 # Initial Release
 
 # Default values for testing
@@ -137,8 +137,8 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
     print("\nConfiguration Summary:")
     print(f"Source Directory: {source_dir}")
     print(f"Destination Directory: {dest_dir}")
-    print(f"Start Temperature: {start_temp}°C")
-    print(f"Stop Temperature: {stop_temp}°C")
+    print(f"User Start Temperature: {start_temp}°C")
+    print(f"User Stop Temperature: {stop_temp}°C")
     print(f"Monitoring Drives: {', '.join(drive_letters)}")
 
     # Show a preview of the files to be synced
