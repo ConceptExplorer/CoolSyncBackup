@@ -172,10 +172,10 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
                 if backup_in_progress:
                     print("Temperature is too high. Pausing backup...")
                     backup_in_progress = False
-                print("Waiting for temperature to drop within the safe range...")
+                print("Waiting for temperature to drop within the User specified safe range...")
 
         if not backup_in_progress:
-            print("Waiting for temperature to drop within the safe range...")
+            print("Waiting for temperature to drop within the User specified safe range...")
 
         time.sleep(60)  # Wait 60 seconds before checking the temperature again
 
