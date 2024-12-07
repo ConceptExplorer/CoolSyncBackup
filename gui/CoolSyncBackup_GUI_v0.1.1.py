@@ -17,8 +17,8 @@ config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'co
 config = configparser.ConfigParser()
 config.read(config_path)
 
-DEFAULT_SOURCE_DIR = config.get('DEFAULT', 'SOURCE_DIR', fallback='Your\\Default\\Source\\Directory')
-DEFAULT_DEST_DIR = config.get('DEFAULT', 'DEST_DIR', fallback='Your\\Default\\Destination\\Directory')
+DEFAULT_SOURCE_DIR = config.get('DEFAULT', 'SOURCE_DIR', fallback='Your/Default/Source/Directory').replace("\\", "/")
+DEFAULT_DEST_DIR = config.get('DEFAULT', 'DEST_DIR', fallback='Your/Default/Destination/Directory').replace("\\", "/")
 DEFAULT_START_TEMP = 30  # Example start temperature in Celsius
 DEFAULT_STOP_TEMP = 47  # Updated default stop temperature in Celsius
 
@@ -77,11 +77,12 @@ class CoolSyncBackupApp:
     def log(self, message):
         self.log_text.config(state='normal')
         self.log_text.insert(tk.END, message + "\n")
+        self.log_text.see(tk.END)  # Ensure the most recent log message is visible
         self.log_text.config(state='disabled')
 
     def stop_backup(self):
         self.stop_backup_flag.set()
-        self.log("Backup Stopped.\n-------------------")
+        self.log("Backup Stopped\n-------------------")
 
     def start_backup(self):
         self.stop_backup_flag.clear()
