@@ -10,9 +10,6 @@
 CoolSync backup is a streamlined synchronization tool designed for efficiency and simplicity. This repository now focuses on the console version, with plans to eventually incorporate improvements into a new GUI version.
 
 ## Current Versions
-### Old GUI Version
-The old GUI version, `CoolSyncBackup_oldGUI.py`, features a user-friendly interface with Start, Pause/Resume, and Stop buttons.
-
 ### Console Version
 The console version, `console/CoolSyncBackup_console_v0.1.0.py`, is designed to be straightforward and requires no additional configuration files.
 
