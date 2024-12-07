@@ -52,6 +52,8 @@ def get_drive_temperature(drive_letter):
 
 # Function to perform mirror sync
 def mirror_sync(source_dir, dest_dir, script_dir):
+    synced_files = []  # List to store the first 5 synced files
+
     # Copy new and updated files from source to destination
     for root, dirs, files in os.walk(source_dir):
         for file in files:
@@ -60,6 +62,8 @@ def mirror_sync(source_dir, dest_dir, script_dir):
             dest_dir_path = os.path.dirname(dest_file)
             os.makedirs(dest_dir_path, exist_ok=True)
             shutil.copy2(src_file, dest_file)
+            if len(synced_files) < 5:  # Collect the first 5 files
+                synced_files.append(os.path.relpath(src_file, source_dir))
     
     # Delete files and directories from destination that are not in source
     for root, dirs, files in os.walk(dest_dir):
@@ -74,6 +78,11 @@ def mirror_sync(source_dir, dest_dir, script_dir):
             src_dir_path = os.path.join(source_dir, os.path.relpath(dest_dir_path, dest_dir))
             if not os.path.exists(src_dir_path) and dest_dir_path != script_dir:
                 shutil.rmtree(dest_dir_path)
+
+    # Print the first 5 files that were synced
+    print("First 5 files that were synced:")
+    for file in synced_files:
+        print(file)
 
 def preview_files(source_dir, num_files=5):
     """
@@ -140,6 +149,9 @@ def monitor_and_backup(source_dir, dest_dir, start_temp, stop_temp):
                     print("Temperature is too high. Pausing backup...")
                     backup_in_progress = False
                 print("Waiting for temperature to drop within the safe range...")
+
+        if not backup_in_progress:
+            print("Waiting for temperature to drop within the safe range...")
 
         time.sleep(60)  # Wait 60 seconds before checking the temperature again
 
