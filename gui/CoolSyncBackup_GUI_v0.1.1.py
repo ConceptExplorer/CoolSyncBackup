@@ -9,31 +9,34 @@ from tkinter import messagebox, filedialog
 import configparser
 
 # CoolSync Backup
-# Version: v0.1.1
+# Version: v0.2.0
 # GUI Version
 
 # Path to config.ini in the root folder
-config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config.ini')
+config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.ini')
 config = configparser.ConfigParser()
 config.read(config_path)
 
-DEFAULT_SOURCE_DIR = config.get('DEFAULT', 'SOURCE_DIR', fallback='Your/Default/Source/Directory').replace("\\", "/")
-DEFAULT_DEST_DIR = config.get('DEFAULT', 'DEST_DIR', fallback='Your/Default/Destination/Directory').replace("\\", "/")
-DEFAULT_START_TEMP = 30  # Example start temperature in Celsius
-DEFAULT_STOP_TEMP = 47  # Updated default stop temperature in Celsius
+DEFAULT_SOURCE_DIR = config.get('SETTINGS', 'SOURCE_DIR', fallback='Your/Default/Source/Directory').replace("\\", "/")
+DEFAULT_DEST_DIR = config.get('SETTINGS', 'DEST_DIR', fallback='Your/Default/Destination/Directory').replace("\\", "/")
+DEFAULT_START_TEMP = config.getfloat('SETTINGS', 'START_TEMP', fallback=30)  # Example start temperature in Celsius
+DEFAULT_STOP_TEMP = config.getfloat('SETTINGS', 'STOP_TEMP', fallback=47)  # Updated default stop temperature in Celsius
+DEFAULT_DARK_MODE = config.getboolean('SETTINGS', 'DARK_MODE', fallback=False)
 
 class CoolSyncBackupApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("CoolSync Backup v0.1.1")
-        
+        self.root.title("CoolSync Backup v0.2.0")
+
         self.source_dir = tk.StringVar(value=DEFAULT_SOURCE_DIR)
         self.dest_dir = tk.StringVar(value=DEFAULT_DEST_DIR)
         self.start_temp = tk.DoubleVar(value=DEFAULT_START_TEMP)
         self.stop_temp = tk.DoubleVar(value=DEFAULT_STOP_TEMP)
+        self.is_dark_mode = tk.BooleanVar(value=DEFAULT_DARK_MODE)
         self.stop_backup_flag = threading.Event()
 
         self.create_widgets()
+        self.update_mode()
 
     def create_widgets(self):
         tk.Label(self.root, text="Source Directory:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
@@ -54,8 +57,51 @@ class CoolSyncBackupApp:
         tk.Button(self.root, text="Stop Backup", command=self.stop_backup).grid(row=4, column=1, columnspan=1, pady=10)
         tk.Button(self.root, text="Save Settings", command=self.save_settings).grid(row=5, column=0, columnspan=3, pady=5)
         
+        self.dark_mode_button = tk.Checkbutton(self.root, text="Dark Mode", variable=self.is_dark_mode, command=self.toggle_dark_mode)
+        self.dark_mode_button.grid(row=5, column=2, padx=5, pady=5)
+        
+        self.update_checkbox_state()
+
         self.log_text = tk.Text(self.root, state='disabled', width=80, height=10)
         self.log_text.grid(row=6, column=0, columnspan=3, padx=5, pady=5)
+
+    def update_mode(self):
+        if self.is_dark_mode.get():
+            self.apply_dark_mode()
+        else:
+            self.apply_light_mode()
+        self.save_settings()
+        self.update_checkbox_state()
+
+    def update_checkbox_state(self):
+        if self.is_dark_mode.get():
+            self.dark_mode_button.select()
+        else:
+            self.dark_mode_button.deselect()
+
+    def toggle_dark_mode(self):
+        if self.is_dark_mode.get():
+            self.apply_dark_mode()
+        else:
+            self.apply_light_mode()
+        self.save_settings()
+        self.update_checkbox_state()
+
+    def apply_light_mode(self):
+        self.root.config(bg="white")
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Label) or isinstance(widget, tk.Button) or isinstance(widget, tk.Entry) or isinstance(widget, tk.Checkbutton):
+                widget.config(bg="white", fg="black")
+        self.log_text.config(bg="white", fg="black")
+        self.dark_mode_button.config(bg="white", fg="black")
+
+    def apply_dark_mode(self):
+        self.root.config(bg="black")
+        for widget in self.root.winfo_children():
+            if isinstance(widget, tk.Label) or isinstance(widget, tk.Button) or isinstance(widget, tk.Entry) or isinstance(widget, tk.Checkbutton):
+                widget.config(bg="black", fg="white")
+        self.log_text.config(bg="black", fg="white")
+        self.dark_mode_button.config(bg="black", fg="white")
 
     def browse_source(self):
         directory = filedialog.askdirectory()
@@ -68,12 +114,17 @@ class CoolSyncBackupApp:
             self.dest_dir.set(directory)
 
     def save_settings(self):
-        config.set('DEFAULT', 'SOURCE_DIR', self.source_dir.get())
-        config.set('DEFAULT', 'DEST_DIR', self.dest_dir.get())
+        if not config.has_section('SETTINGS'):
+            config.add_section('SETTINGS')
+        config.set('SETTINGS', 'SOURCE_DIR', self.source_dir.get())
+        config.set('SETTINGS', 'DEST_DIR', self.dest_dir.get())
+        config.set('SETTINGS', 'START_TEMP', str(self.start_temp.get()))
+        config.set('SETTINGS', 'STOP_TEMP', str(self.stop_temp.get()))
+        config.set('SETTINGS', 'DARK_MODE', str(self.is_dark_mode.get()))
         with open(config_path, 'w') as configfile:
             config.write(configfile)
         self.log("Settings saved successfully.")
-    
+
     def log(self, message):
         self.log_text.config(state='normal')
         self.log_text.insert(tk.END, message + "\n")
@@ -146,23 +197,23 @@ class CoolSyncBackupApp:
             drive_letters.add(os.path.splitdrive(path)[0])
         return list(drive_letters)
 
-    def get_drive_temperature(self, drive_letter):
-        try:
-            result = subprocess.run(['smartctl', '-A', f'{drive_letter}'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if result.returncode != 0:
-                raise Exception(f"smartctl error: {result.stderr}")
-            
-            for line in result.stdout.split('\n'):
-                if 'Temperature_Celsius' in line or 'Temperature' in line:
-                    match = re.search(r'(\d+)', line)
-                    if match:
-                        temp = int(match.group(1))
-                        return temp
-                    else:
-                        raise Exception("Temperature value not found")
-        except Exception as e:
-            self.log(f"Error getting temperature for drive {drive_letter}: {e}")
-            return None
+def get_drive_temperature(self, drive_letter):
+    try:
+        result = subprocess.run(['smartctl', '-A', f'{drive_letter}'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if result.returncode != 0:
+            raise Exception(f"smartctl error: {result.stderr}")
+
+        for line in result.stdout.split('\n'):
+            if 'Temperature_Celsius' in line or 'Temperature' in line:
+                match = re.search(r'(\d+)', line)
+                if match:
+                    temp = int(match.group(1))
+                    return temp
+                else:
+                    raise Exception("Temperature value not found")
+    except Exception as e:
+        self.log(f"Error getting temperature for drive {drive_letter}: {e}")
+        return None
 
     def mirror_sync(self, source_dir, dest_dir):
         synced_files = []
