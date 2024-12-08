@@ -1,13 +1,33 @@
 # CoolSync Backup
 
-**CoolSync Backup** - An efficient file synchronization tool designed to keep your files up-to-date while monitoring drive temperatures to prevent overheating. Featuring a user-friendly GUI with Start, Pause/Resume, and Stop buttons, CoolSync ensures smooth file sync without risking your hardware.
+## Version 0.2.0
+
+### Light Mode
+![Light Mode Screenshot](images/light_mode_screenshot.png)
+
+### Dark Mode
+![Dark Mode Screenshot](images/dark_mode_screenshot.png)
 
 ## Features
-- Monitors drive temperatures to prevent overheating.
-- Efficient file synchronization with preview mode.
+- Added dark mode toggle feature.
+- Ensured settings are saved and loaded correctly upon relaunch.
+- Fixed bugs and improved UI.
 
-![CoolSync Backup App](screenshot.png)
+## Instructions
+1. Download and extract the project files.
+2. Run the `CoolSyncBackup_GUI_v0.2.0.py` script.
+3. Use the GUI to set source and destination directories.
+4. Toggle dark mode if desired.
+5. Start and stop backups as needed.
 
+## Usage
+Run the application:
+bash
+python CoolSyncBackup_GUI_v0.2.0.py
+
+Ensure you have the required dependencies installed:
+```bash
+pip install -r requirements.txt
 ## Overview
 CoolSync Backup is a streamlined synchronization tool designed for efficiency and simplicity. This repository now focuses on the console version, with plans to eventually incorporate improvements into a new GUI version.
 
