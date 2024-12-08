@@ -6,6 +6,8 @@
 - Monitors drive temperatures to prevent overheating.
 - Efficient file synchronization with preview mode.
 
+![CoolSync Backup App](screenshot.png)
+
 ## Overview
 CoolSync Backup is a streamlined synchronization tool designed for efficiency and simplicity. This repository now focuses on the console version, with plans to eventually incorporate improvements into a new GUI version.
 
