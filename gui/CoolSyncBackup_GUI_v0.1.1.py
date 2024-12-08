@@ -82,7 +82,7 @@ class CoolSyncBackupApp:
 
     def stop_backup(self):
         self.stop_backup_flag.set()
-        self.log("Backup Stopped\n-------------------")
+        self.log("Backup Stopped.\n-------------------")
 
     def start_backup(self):
         self.stop_backup_flag.clear()
