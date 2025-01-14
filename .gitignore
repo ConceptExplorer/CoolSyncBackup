@@ -1,1 +1,16 @@
-config.ini
+# Ignore configuration files
+config.json
+
+# Ignore test files
+New code to test merge.py
+
+# Ignore the "My copy of docs" folder
+My copy of docs/
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore virtual environment directories
+venv/
+env/
