@@ -2,6 +2,9 @@
 
 ## Version 0.2.5 (started from scratch)
 
+### Screenshot
+![Screenshot](images/screenshot.png)
+
 ### Changelist for v0.2.5:
 - **Added `stop_sync` method**: Ensures the synchronization process can be stopped properly.
 - **Included `on_closing` method**: Handles window close events cleanly.
@@ -16,12 +19,6 @@
 - Temps may be inaccurate on some storage devices.
 
 ## Version 0.2.0
-
-### Light Mode
-![Light Mode Screenshot](images/light_mode_screenshot.png)
-
-### Dark Mode
-![Dark Mode Screenshot](images/dark_mode_screenshot.png)
 
 ## Features
 - Added dark mode toggle feature.
