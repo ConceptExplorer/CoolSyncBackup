@@ -1,4 +1,4 @@
-# Contributing to CoolSync Backup
+﻿# Contributing to CoolSyncBackup
 
 First off, thanks for taking the time to contribute! 🎉
 
